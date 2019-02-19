@@ -4,9 +4,11 @@ import android.os.Bundle
 import com.redmadrobot.lib.sd.LoadingStateDelegate
 import com.ave.arch.sample.R
 import com.ave.arch.sample.di.DI
+import com.ave.arch.sample.lifecycle.Event
 import com.ave.arch.sample.lifecycle.getViewModel
 import com.ave.arch.sample.lifecycle.observe
 import com.ave.arch.sample.lifecycle.viewModelFactory
+import com.ave.arch.sample.ui.base.ShowToast
 import com.ave.arch.sample.ui.base.activity.BaseActivity
 import com.ave.arch.sample.ui.base.layout.StubStateData
 import kotlinx.android.synthetic.main.activity_main.*
@@ -25,7 +27,7 @@ class InfoActivity : BaseActivity() {
         val viewModelFactory = viewModelFactory { DI.user.get().userViewModel() }
         viewModel = getViewModel(viewModelFactory)
         observe(viewModel.user, this::onUserChanged)
-        observe(viewModel.command, this::onCommandReceived)
+        observe(viewModel.events, this::onEventReceived)
     }
 
     private fun onUserChanged(viewState: UserViewState) {
@@ -50,10 +52,10 @@ class InfoActivity : BaseActivity() {
         }
     }
 
-    private fun onCommandReceived(command: UserViewCommand) {
-        when (command) {
+    private fun onEventReceived(event: Event) {
+        when (event) {
             is ShowToast -> {
-                showMessage(getString(command.textRes))
+                showMessage(getString(event.textRes))
             }
         }
     }

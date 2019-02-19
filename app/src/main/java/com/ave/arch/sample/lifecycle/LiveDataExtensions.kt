@@ -10,6 +10,10 @@ fun <T> MutableLiveData<T>.onNext(next: T) {
     this.value = next
 }
 
+fun EventsQueue.onNext(next: Event) {
+    this.offer(next)
+}
+
 inline fun <VM : ViewModel> viewModelFactory(crossinline f: () -> VM): ViewModelProvider.Factory {
     return object : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
@@ -39,21 +43,31 @@ inline fun <reified T : Any, reified L : LiveData<T?>> Fragment.observe(
     liveData.observe(this.viewLifecycleOwner, Observer { it?.let { block.invoke(it) } })
 }
 
-inline fun <reified T : Any, reified L : CommandsLiveData<T>> LifecycleOwner.observe(
-        liveData: L,
+inline fun <reified T : Event> FragmentActivity.observe(
+        eventsQueue: EventsQueue,
         noinline block: (T) -> Unit
 ) {
-    liveData.observe(this, Observer<LinkedList<T>> { commands ->
-        if (commands == null) {
-            return@Observer
-        }
-        var command: T?
-        do {
-            command = commands.poll()
-            if (command != null) {
-                block.invoke(command)
+    eventsQueue.observe(
+            this,
+            Observer<Queue<Event>> { queue: Queue<Event>? ->
+                while (queue != null && queue.isNotEmpty()) {
+                    block.invoke(queue.poll() as T)
+                }
             }
-        } while (command != null)
-    })
+    )
+}
+
+inline fun <reified T : Event> Fragment.observe(
+        eventsQueue: EventsQueue,
+        noinline block: (T) -> Unit
+) {
+    eventsQueue.observe(
+            this.viewLifecycleOwner,
+            Observer<Queue<Event>> { queue: Queue<Event>? ->
+                while (queue != null && queue.isNotEmpty()) {
+                    block.invoke(queue.poll() as T)
+                }
+            }
+    )
 }
 

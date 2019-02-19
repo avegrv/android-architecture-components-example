@@ -4,8 +4,9 @@ import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import com.ave.arch.sample.R
 import com.ave.arch.sample.domain.repositories.user.UserRepository
-import com.ave.arch.sample.lifecycle.CommandsLiveData
+import com.ave.arch.sample.lifecycle.EventsQueue
 import com.ave.arch.sample.lifecycle.onNext
+import com.ave.arch.sample.ui.base.ShowToast
 import com.ave.arch.sample.ui.base.viewmodel.BaseViewModel
 import javax.inject.Inject
 
@@ -19,14 +20,14 @@ class UserViewModel @Inject constructor(
 
     val user: MutableLiveData<UserViewState> = MutableLiveData()
 
-    val command: CommandsLiveData<UserViewCommand> = CommandsLiveData()
+    val events = EventsQueue()
 
     init {
         loadUserInfo()
     }
 
     fun onGetPhoneNumberClicked() {
-        command.onNext(ShowToast(R.string.get_phone_number_stub))
+        events.onNext(ShowToast(R.string.get_phone_number_stub))
     }
 
     private fun loadUserInfo() {
