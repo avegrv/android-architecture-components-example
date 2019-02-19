@@ -1,4 +1,4 @@
-Android Architecture Components sample
+Android Architecture Components example
 ======================================
 
 This repository is example of usage Android Architecture Components.
