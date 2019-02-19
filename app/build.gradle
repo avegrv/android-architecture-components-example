@@ -1,0 +1,64 @@
+apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
+
+android {
+    def globalConfiguration = rootProject.extensions.getByName("ext")
+
+    compileSdkVersion build_versions.compile_sdk
+    buildToolsVersion build_versions.build_tools
+
+    defaultConfig {
+        applicationId "com.ave.arch.sample"
+
+        minSdkVersion build_versions.min_sdk
+        targetSdkVersion build_versions.target_sdk
+
+        versionCode globalConfiguration.versionCode
+        versionName globalConfiguration.versionName
+        vectorDrawables.useSupportLibrary = true
+    }
+    buildTypes {
+        release {
+            shrinkResources true
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+androidExtensions {
+    experimental = true
+}
+
+dependencies {
+
+    implementation(
+            project(path: ':domain'),
+            project(path: ':data'),
+
+            // support
+            deps.arch.lifecycle,
+            deps.support.app_compat,
+            deps.support.cardview,
+            deps.support.design,
+
+            // ui
+            deps.ui.stateDelegator,
+            deps.ui.constraint_layout,
+
+            // navigation
+            deps.navigation.cicerone,
+    )
+
+    kapt(
+            deps.arch.compiler,
+            deps.dagger.compiler
+    )
+
+    testImplementation(
+            deps.test.junit,
+            deps.test.roboelectric
+    )
+}

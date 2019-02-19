@@ -1,0 +1,50 @@
+apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-kapt'
+
+android {
+    def globalConfiguration = rootProject.extensions.getByName("ext")
+
+    compileSdkVersion build_versions.compile_sdk
+    buildToolsVersion build_versions.build_tools
+
+    defaultConfig {
+        minSdkVersion build_versions.min_sdk
+        targetSdkVersion build_versions.target_sdk
+
+        versionCode globalConfiguration.versionCode
+        versionName globalConfiguration.versionName
+
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+dependencies {
+    implementation(
+            project(path: ':domain'),
+
+            deps.room.runtime,
+            deps.room.rxjava2,
+
+            deps.retrofit.runtime,
+            deps.retrofit.rx_adapter,
+            deps.retrofit.gson,
+
+            deps.utils.okhttp_logging_interceptor,
+    )
+
+    kapt(
+            deps.room.compiler,
+    )
+
+    testImplementation(
+            deps.test.junit
+    )
+}

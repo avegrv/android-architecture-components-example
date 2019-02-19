@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">arch-sample</string>
+
+    <string name="loading_zero_title">Ooops!</string>
+    <string name="loading_zero_description">Try later</string>
+
+    <string name="get_phone_number_btn">Get phone</string>
+    <string name="get_phone_number_stub">Next time, amigo</string>
+</resources>
