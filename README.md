@@ -5,6 +5,14 @@ This repository is example of usage Android Architecture Components.
 
 Other libraries used at project: RxJava 2, Dagger 2, Retrofit.
 
+Contributors
+------------
+
+The following people have contributed to the concept/code:
+
+- [Sergei Zarochentsev](https://github.com/ZSergey26)
+- [Dmitry Berdnikov](https://github.com/RcmJava)
+
 ### License
 
     MIT License
