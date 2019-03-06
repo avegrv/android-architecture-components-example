@@ -24,7 +24,7 @@ class InfoActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         screenState = LoadingStateDelegate(content, progress, zero_stub)
 
-        val viewModelFactory = viewModelFactory { DI.user.get().userViewModel() }
+        val viewModelFactory = viewModelFactory { DI.user.userViewModel() }
         viewModel = getViewModel(viewModelFactory)
         observe(viewModel.user, this::onUserChanged)
         observe(viewModel.events, this::onEventReceived)

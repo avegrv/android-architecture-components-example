@@ -14,37 +14,28 @@ import ave.arch.sample.data.repository.user.UserDataRepository
 import ave.arch.sample.data.storage.db.AppDatabase
 
 @Module
-abstract class UserModule {
+internal class UserModule {
 
-    @Module
-    companion object {
+    @Provides
+    @UserScope
+    fun provideAppDatabase(context: Context) = DataLayerDelegate.provideAppDatabase(context)
 
-        @JvmStatic
-        @Provides
-        @UserScope
-        internal fun provideAppDatabase(context: Context) = DataLayerDelegate.provideAppDatabase(context)
+    @Provides
+    @UserScope
+    fun provideAppApi() = AppApiFactory()
 
-        @JvmStatic
-        @Provides
-        @UserScope
-        internal fun provideAppApi() = AppApiFactory()
+    @Provides
+    @UserScope
+    fun provideUserApi(appApiFactory: AppApiFactory) = appApiFactory.create(UserApi::class.java)
 
-        @JvmStatic
-        @Provides
-        @UserScope
-        internal fun provideUserApi(appApiFactory: AppApiFactory) = appApiFactory.create(UserApi::class.java)
-
-
-        @JvmStatic
-        @Provides
-        @UserScope
-        internal fun provideUserRepository(
-                schedulers: SchedulersProvider,
-                systemInfoProvider: SystemInfoProvider,
-                userApi: UserApi,
-                dataBase: AppDatabase
-        ): UserRepository {
-            return UserDataRepository(schedulers, systemInfoProvider, userApi, dataBase.userEntityDao())
-        }
+    @Provides
+    @UserScope
+    fun provideUserRepository(
+            schedulers: SchedulersProvider,
+            systemInfoProvider: SystemInfoProvider,
+            userApi: UserApi,
+            dataBase: AppDatabase
+    ): UserRepository {
+        return UserDataRepository(schedulers, systemInfoProvider, userApi, dataBase.userEntityDao())
     }
 }

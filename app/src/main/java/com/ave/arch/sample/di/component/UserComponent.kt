@@ -7,7 +7,7 @@ import dagger.Subcomponent
 
 @UserScope
 @Subcomponent(modules = [UserModule::class])
-interface UserComponent {
+internal interface UserComponent {
 
     @Subcomponent.Builder
     interface Builder {

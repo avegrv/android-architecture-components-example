@@ -7,12 +7,7 @@ internal object DI {
 
     lateinit var app: ApplicationComponent
 
-    val user: ComponentHolder<UserComponent> = componentHolder(
-            constructor = { app.userComponent().build() },
-            destructor = {
-                // destroy child's components here
-            }
-    )
+    val user by lazy { app.userComponent().build() }
 
     fun init(context: Context) {
         this.app = DaggerApplicationComponent

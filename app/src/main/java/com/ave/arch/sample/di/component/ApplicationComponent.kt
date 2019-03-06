@@ -8,7 +8,7 @@ import dagger.Component
 
 @ApplicationScope
 @Component(modules = [(ApplicationModule::class)])
-interface ApplicationComponent {
+internal interface ApplicationComponent {
 
     fun userComponent(): UserComponent.Builder
 

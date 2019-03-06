@@ -10,20 +10,14 @@ import dagger.Module
 import dagger.Provides
 
 @Module
-internal abstract class ApplicationModule {
+internal class ApplicationModule {
 
 
-    @Module
-    companion object {
+    @Provides
+    @ApplicationScope
+    fun provideSchedulersProvider(): SchedulersProvider = SchedulersProviderImpl()
 
-        @JvmStatic
-        @Provides
-        @ApplicationScope
-        internal fun provideSchedulersProvider(): SchedulersProvider = SchedulersProviderImpl()
-
-        @JvmStatic
-        @Provides
-        @ApplicationScope
-        internal fun provideSystemInfoProvider(context: Context): SystemInfoProvider = SystemInfoDataProvider(context)
-    }
+    @Provides
+    @ApplicationScope
+    fun provideSystemInfoProvider(context: Context): SystemInfoProvider = SystemInfoDataProvider(context)
 }
